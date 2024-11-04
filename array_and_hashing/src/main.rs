@@ -1,20 +1,15 @@
 use std::{
+    cmp::Reverse,
     collections::{BTreeMap, HashMap},
     iter,
     ops::Deref,
-    vec,
+    usize, vec,
 };
 
 fn main() {
-    let vec: Vec<String> = vec![
-        "eat".to_string(),
-        "tea".to_string(),
-        "tan".to_string(),
-        "ate".to_string(),
-        "nat".to_string(),
-        "bat".to_string(),
-    ];
-    group_anagrams(vec);
+    let nums = vec![4, 1, -1, 2, -1, 2, 3];
+    let k = 2;
+    top_k_frequent(nums, k);
 }
 
 // Problem 210: Contain duplication - Easy
@@ -80,4 +75,28 @@ fn sort_string_ref(input: &str) -> String {
     char_vec.sort_unstable();
     let output: String = char_vec.into_iter().collect();
     output
+}
+
+//problem 347. Top K Frequent Elements - Medium
+fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
+    let mut count_map: HashMap<i32, i32> = HashMap::new();
+    for element in nums.into_iter() {
+        *count_map.entry(element).or_default() += 1;
+    }
+    assert_ne!(count_map.len(), 0);
+    println!("map {:?}", count_map);
+    let mut sorted = count_map
+        .iter()
+        .map(|(&key, &value)| (key, value))
+        .collect::<Vec<(i32, i32)>>();
+    sorted.sort_by_key(|&(_, value)| Reverse(value));
+    assert_ne!(sorted.len(), 0);
+    println!("sorted {:?}", sorted);
+    let res_vec: Vec<i32> = sorted
+        .into_iter()
+        .take(k as usize)
+        .map(|(key, _)| key)
+        .collect();
+    println!("res_vec {:?}", res_vec);
+    res_vec
 }
