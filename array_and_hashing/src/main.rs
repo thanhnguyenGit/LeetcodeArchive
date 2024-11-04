@@ -1,4 +1,5 @@
 use std::{
+    char,
     cmp::Reverse,
     collections::{BTreeMap, HashMap},
     iter,
@@ -7,9 +8,8 @@ use std::{
 };
 
 fn main() {
-    let nums = vec![4, 1, -1, 2, -1, 2, 3];
-    let k = 2;
-    top_k_frequent(nums, k);
+    let s = "3[a2[c]]".to_string();
+    decode_string(s);
 }
 
 // Problem 210: Contain duplication - Easy
@@ -99,4 +99,33 @@ fn top_k_frequent(nums: Vec<i32>, k: i32) -> Vec<i32> {
         .collect();
     println!("res_vec {:?}", res_vec);
     res_vec
+}
+
+//problem 394: Decode String - Medium
+pub fn decode_string(s: String) -> String {
+    let mut num = String::from("");
+    let mut curr = String::from("");
+    let mut stack = vec!["".to_string()];
+
+    for char in s.chars() {
+        match char {
+            '0'..='9' => num.push(char),
+            '[' => {
+                stack.push(curr);
+                stack.push(num);
+                curr = "".to_string();
+                num = "".to_string();
+            }
+            ']' => {
+                let mut n = stack.pop().unwrap().parse::<usize>().unwrap();
+                curr = curr.repeat(n);
+                let mut prev = stack.pop().unwrap().to_string();
+                curr = prev + &curr;
+            }
+            _ => {
+                curr.push(char);
+            }
+        }
+    }
+    curr
 }
