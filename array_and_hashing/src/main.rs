@@ -8,7 +8,7 @@ use std::{
 };
 
 fn main() {
-    let s = "3[a2[c]]".to_string();
+    let s = "3[a]2[bc]".to_string();
     decode_string(s);
 }
 
@@ -109,23 +109,55 @@ pub fn decode_string(s: String) -> String {
 
     for char in s.chars() {
         match char {
-            '0'..='9' => num.push(char),
+            '0'..='9' => {
+                num.push(char);
+                println!("current - {curr}, num - {num}, char - {char}");
+                println!("stack : {stack:?}")
+            }
             '[' => {
                 stack.push(curr);
                 stack.push(num);
                 curr = "".to_string();
                 num = "".to_string();
+                println!("current - {curr}, num - {num}, char - {char}");
+                println!("stack : {stack:?}")
             }
             ']' => {
                 let mut n = stack.pop().unwrap().parse::<usize>().unwrap();
                 curr = curr.repeat(n);
                 let mut prev = stack.pop().unwrap().to_string();
                 curr = prev + &curr;
+                println!("current - {curr}, num - {num}, char - {char}");
+                println!("stack : {stack:?}")
             }
             _ => {
                 curr.push(char);
+                println!("current - {curr}, num - {num}, char - {char}");
+                println!("stack : {stack:?}")
             }
         }
     }
     curr
+}
+
+//problem 535: Encode and Decode TinyURL - Medium
+struct Codec {}
+
+/**
+ * `&self` means the method takes an immutable reference.
+ * If you need a mutable reference, change it to `&mut self` instead.
+ */
+impl Codec {
+    fn new() -> Self {}
+
+    // Encodes a URL to a shortened URL.
+    fn encode(&self, longURL: String) -> String {}
+
+    // Decodes a shortened URL to its original URL.
+    fn decode(&self, shortURL: String) -> String {}
+}
+fn runner_535() {
+    let obj = Codec::new();
+    let s: String = obj.encode(strs);
+    let ans: VecVec<String> = obj.decode(s);
 }
