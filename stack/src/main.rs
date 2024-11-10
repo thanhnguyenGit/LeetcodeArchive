@@ -1,7 +1,22 @@
 use std::{collections::HashMap, i32::MAX};
 
 fn main() {
-    minstack_runner();
+    let tokens = vec![
+        "10".to_string(),
+        "6".to_string(),
+        "9".to_string(),
+        "3".to_string(),
+        "+".to_string(),
+        "-11".to_string(),
+        "*".to_string(),
+        "/".to_string(),
+        "*".to_string(),
+        "17".to_string(),
+        "+".to_string(),
+        "5".to_string(),
+        "+".to_string(),
+    ];
+    eval_rpn(tokens);
 }
 
 //problem 20: Valid Parentheses - Easy:
@@ -89,4 +104,56 @@ fn minstack_runner() {
     minsta.push(27);
 
     minsta.top();
+}
+
+//problem 150. Evalute Reverse Polish Notation
+fn eval_rpn(tokens: Vec<String>) -> i32 {
+    println!("original string: {tokens:?}");
+    let mut stack = Vec::new();
+    for element in tokens.iter() {
+        match element.as_str() {
+            "+" => {
+                println!("found '+' operator");
+                let val1 = stack.pop().expect("Top element");
+                let val2 = stack.pop().expect("Below top element");
+                let res = val2 + val1;
+                println!("val1 : {val1}, val2 : {val2}, res : {res}");
+                stack.push(res);
+            }
+            "-" => {
+                println!("found '-' operator");
+                let val1 = stack.pop().expect("Top element");
+                let val2 = stack.pop().expect("Below top element");
+                let res = val2 - val1;
+                println!("val1 : {val1}, val2 : {val2}, res : {res}");
+                stack.push(res);
+            }
+            "*" => {
+                println!("found '*' operator");
+                let val1 = stack.pop().expect("Top element");
+                let val2 = stack.pop().expect("Below top element");
+                let res = val2 * val1;
+                println!("val1 : {val1}, val2 : {val2}, res : {res}");
+                stack.push(res);
+            }
+            "/" => {
+                println!("found '/' operator");
+                let val1 = stack.pop().expect("Top element");
+                let val2 = stack.pop().expect("Below top element");
+                let res = val2 / val1;
+                stack.push(res)
+            }
+            _ => {
+                stack.push(element.parse::<i32>().expect("Turn to i32"));
+            }
+        }
+    }
+    println!("{:?}", stack);
+    *stack.last().expect("Only one value")
+}
+
+//problem 22: Generate Parentheses - Medium
+//
+fn generate_parenthesis(n: i32) -> Vec<String> {
+    vec![]
 }
