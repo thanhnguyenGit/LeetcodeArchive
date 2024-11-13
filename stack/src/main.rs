@@ -1,22 +1,7 @@
-use std::{collections::HashMap, i32::MAX};
+use std::collections::HashMap;
 
 fn main() {
-    let tokens = vec![
-        "10".to_string(),
-        "6".to_string(),
-        "9".to_string(),
-        "3".to_string(),
-        "+".to_string(),
-        "-11".to_string(),
-        "*".to_string(),
-        "/".to_string(),
-        "*".to_string(),
-        "17".to_string(),
-        "+".to_string(),
-        "5".to_string(),
-        "+".to_string(),
-    ];
-    eval_rpn(tokens);
+    generate_parenthesis(3);
 }
 
 //problem 20: Valid Parentheses - Easy:
@@ -155,5 +140,32 @@ fn eval_rpn(tokens: Vec<String>) -> i32 {
 //problem 22: Generate Parentheses - Medium
 //
 fn generate_parenthesis(n: i32) -> Vec<String> {
-    vec![]
+    let mut res = Vec::new();
+    let mut s = String::new();
+    backtrack(&mut res, &mut s, 0, 0, n);
+    res
+}
+
+fn backtrack(res: &mut Vec<String>, s: &mut String, open: i32, close: i32, n: i32) {
+    if close == open && open == n {
+        res.push(s.clone());
+        println!("res : {res:?}");
+        return;
+    }
+
+    if open < n {
+        s.push('(');
+        println!("s : {s}");
+        backtrack(res, s, open + 1, close, n);
+        s.pop();
+        println!("s after backtrack : {s}")
+    }
+
+    if close < open {
+        s.push(')');
+        println!("s : {s}");
+        backtrack(res, s, open, close + 1, n);
+        s.pop();
+        println!("s after backtrack : {s}")
+    }
 }

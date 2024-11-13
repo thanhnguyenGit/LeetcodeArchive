@@ -1,8 +1,11 @@
-use std::{collections::HashMap, vec};
+use std::{
+    collections::{HashMap, HashSet},
+    usize, vec,
+};
 
 fn main() {
-    let s = "0P".to_string();
-    is_palindrome(s);
+    let nums = vec![-1, 0, 1, 2, -1, -4];
+    three_sum(nums);
 }
 
 //problem 125: Valid Panlindrome - Easy
@@ -45,10 +48,38 @@ fn two_sum(numbers: Vec<i32>, target: i32) -> Vec<i32> {
             None => tmp_hashmap.insert(*value, index as i32),
         };
     }
+
     vec![]
 }
 
 //problem 15: 3Sum
-fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
-    vec![vec![]]
+fn three_sum(mut nums: Vec<i32>) -> Vec<Vec<i32>> {
+    nums.sort_unstable(); //O(nlogn)
+    println!("sorted input nums {:?}", nums);
+    let mut result_set: HashSet<Vec<i32>> = HashSet::new();
+    for i in 0..nums.len() {
+        for j in i + 1..nums.len() {
+            // 2-nested loop: O(n^2)
+            println!("candidates : {}:{} {}:{}", i, nums[i], j, nums[j]);
+            let target = -nums[i] - nums[j];
+            println!("Look for target {} in {:?}", target, &nums[j + 1..]);
+            let result = match &nums[j + 1..].binary_search(&target) {
+                // binary_search: O(logn)
+                Ok(value) => {
+                    let tmp_vec = &nums[j + 1..];
+                    let vec = vec![nums[i], nums[j], tmp_vec[*value]];
+                    println!(
+                        "found {} {},create a new test_vec : {:?}",
+                        value, tmp_vec[*value], vec
+                    );
+                    result_set.insert(vec);
+                    Some(*value)
+                }
+                Err(_) => None,
+            };
+        }
+    }
+    //total (O(n^2 logn))
+    println!("Final result set : {:?}", result_set);
+    result_set.into_iter().collect::<Vec<Vec<i32>>>()
 }
