@@ -1,9 +1,11 @@
+use std::cmp::min;
 use std::usize;
 
 fn main() {
     // let nums = vec![vec![1, 3, 5, 6], vec![10, 11, 16, 20], vec![23, 30, 34, 60]];
-    let nums = vec![vec![1]];
-    search_matrix(nums, 0);
+    let piles = vec![30, 11, 23, 4, 20];
+    let h = 5;
+    min_eating_speed(piles, h);
 }
 
 //problem 704. Binary search
@@ -64,3 +66,29 @@ fn search_matrix(matrix: Vec<Vec<i32>>, target: i32) -> bool {
         Err(_) => return false,
     }
 }
+
+//problem 875: Koko eating bananas
+fn min_eating_speed(piles: Vec<i32>, h: i32) -> i32 {
+    let mut left: i32 = 1;
+    let mut right: i32 = 0;
+
+    if let Some(get_max) = piles.iter().max() {
+        right = *get_max;
+    }
+    while left < right {
+        let mut total_time = 0;
+        let middle: i32 = (right + left) / 2;
+        let _ = piles.iter().map(|element| {
+            total_time += (*element as f64 / middle as f64).ceil() as i32;
+        }).collect::<Vec<_>>();
+        if total_time <= h {
+            right = middle;
+        } else {
+            left = middle + 1;
+        }
+
+    }
+    right
+}
+
+
