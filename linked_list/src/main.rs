@@ -9,7 +9,10 @@ fn main() {
                     val: 8,
                     next: Some(Box::new(ListNode {
                         val: 12,
-                        next: None,
+                        next: Some(Box::new(ListNode {
+                            val: 15,
+                            next: None,
+                        })),
                     })),
                 })),
             })),
@@ -95,13 +98,31 @@ fn merge_two_lists(
 
 //143. Reorder List
 fn reorder_list(head : &mut Option<Box<ListNode>>) {
+    if head.is_none() || head.as_ref().unwrap().next.is_none() {
+        return;
+    }
+    // Traverse and printf the linked list
+    let mut pointer = head.as_ref();
+    while let Some(node) = pointer {
+        println!("Node val: {}", node.val);
+        pointer  = node.next.as_ref();
+    }
+
+    // find the middle of the list
     let mut slow = head.as_ref();
     let mut fast = head.as_ref();
-
-    while let (Some(slow_node), Some(fast_node)) = (slow,fast) {
-        println!("Slow: {}, Fast: {}", slow_node.val,fast_node.val);
+    let mut mid = 0;
+    while let (Some(slow_node), Some(fast_node)) = (slow,fast.as_ref().unwrap().next.as_ref()) {
+        println!("Slow: {}, Fast: {}", slow_node.val, fast_node.val);
         slow = slow_node.next.as_ref();
-        fast = fast_node.next.as_ref().unwrap().next.as_ref();
+        fast = fast_node.next.as_ref();
 
+        if fast.is_none() {
+            mid = slow.as_ref().unwrap().val;
+            println!("Middle {}", mid);
+            break
+        }
     }
+    let second = &slow.unwrap().next;
+    println!("second {}", second.as_ref().unwrap().val);
 }
