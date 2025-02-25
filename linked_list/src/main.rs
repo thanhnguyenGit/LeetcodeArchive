@@ -1,5 +1,5 @@
 fn main() {
-    let head1 = Some(Box::new(ListNode {
+    let mut head1 = Some(Box::new(ListNode {
         val: 1,
         next: Some(Box::new(ListNode {
             val: 2,
@@ -32,7 +32,7 @@ fn main() {
         })),
     }));
 
-    merge_two_lists(head1, head2);
+    reorder_list(&mut head1);
 }
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
@@ -91,4 +91,17 @@ fn merge_two_lists(
     }
     curr.next = head1.or(head2);
     prehead.next
+}
+
+//143. Reorder List
+fn reorder_list(head : &mut Option<Box<ListNode>>) {
+    let mut slow = head.as_ref();
+    let mut fast = head.as_ref();
+
+    while let (Some(slow_node), Some(fast_node)) = (slow,fast) {
+        println!("Slow: {}, Fast: {}", slow_node.val,fast_node.val);
+        slow = slow_node.next.as_ref();
+        fast = fast_node.next.as_ref().unwrap().next.as_ref();
+
+    }
 }
