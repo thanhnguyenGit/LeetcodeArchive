@@ -8,8 +8,8 @@ use std::{
 };
 
 fn main() {
-    let s = "3[a]2[bc]".to_string();
-    decode_string(s);
+    let nums = vec![1, 2, 3, 4];
+    product_except_self(nums);
 }
 
 // Problem 210: Contain duplication - Easy
@@ -140,24 +140,21 @@ pub fn decode_string(s: String) -> String {
     curr
 }
 
-//problem 535: Encode and Decode TinyURL - Medium
-struct Codec {}
-
-/**
- * `&self` means the method takes an immutable reference.
- * If you need a mutable reference, change it to `&mut self` instead.
- */
-impl Codec {
-    fn new() -> Self {}
-
-    // Encodes a URL to a shortened URL.
-    fn encode(&self, longURL: String) -> String {}
-
-    // Decodes a shortened URL to its original URL.
-    fn decode(&self, shortURL: String) -> String {}
+// problem 238. Product of Array Except Self
+pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
+    let mut prefix_value = 1;
+    let mut surfix_value = 1;
+    let mut res = Vec::with_capacity(nums.len());
+    for (i, num) in nums.iter().enumerate() {
+        res.push(prefix_value);
+        prefix_value *= num;
+    }
+    for (i, num) in nums.iter().enumerate().rev() {
+        res[i] *= surfix_value;
+        surfix_value *= num;
+    }
+    res
 }
-fn runner_535() {
-    let obj = Codec::new();
-    let s: String = obj.encode(strs);
-    let ans: VecVec<String> = obj.decode(s);
-}
+
+// problem 36. Valid Sudoku
+fn is_valid_sudoku(board: Vec<Vec<char>>) -> bool {}
